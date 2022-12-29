@@ -17,15 +17,31 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 // Data insert Function
-async function run(){
+async function run() {
 
-    try{
+    try {
         const AddPost = client.db('AddPost').collection('posts');
+
+        // EndPoint
+        app.post("/addpost", async (req, res) => {
+            const result = await AddPost.insertOne(req.body);
+            if (result.insertedId) {
+                res.send({
+                    success: true,
+                    meassage: `Dataated Successfully with id ${result.insertedId}`
+                })
+            } else {
+                res.send({
+                    success: false,
+                    error: 'Data Created Error'
+                })
+            }
+        });
     }
-    catch{}
+    catch { }
 
 }
-run().catch( error => console.log(error));
+run().catch(error => console.log(error));
 
 
 
